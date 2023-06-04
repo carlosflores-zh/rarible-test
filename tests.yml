@@ -1,0 +1,43 @@
+name: Rarible API - Currencies
+testcases:
+  - name: Get All Currencies with 5 seconds timeout
+    steps:
+      - type: http
+        method: GET
+        url: https://api.rarible.org/v0.1/currencies/all
+        timeout: 5
+        assertions:
+          - result.statuscode ShouldEqual 200
+          - result.timeseconds ShouldBeLessThan 2
+          - result.bodyjson ShouldContainKey currencies
+          - result.bodyjson.currencies ShouldNotBeEmpty
+          - result.bodyjson.currencies ShouldHaveLength 85
+  - name: Get Ethereum Currency with 5 seconds timeout
+    steps:
+      - type: http
+        method: GET
+        url: https://api.rarible.org/v0.1/currencies/ETHEREUM:0x0000000000000000000000000000000000000000/rates/usd?at=2022-01-01T12:00:00Z
+        timeout: 5
+        assertions:
+          - result.statuscode ShouldEqual 200
+          - result.timeseconds ShouldBeLessThan 2
+          - result.bodyjson ShouldContainKey currencyId
+          - result.bodyjson ShouldContainKey rate
+          - result.bodyjson ShouldContainKey symbol
+          - result.bodyjson.symbol ShouldEqual ethereum
+          - result.bodyjson.rate ShouldBeGreaterThan 3695
+          - result.bodyjson.rate ShouldBeLessThan 3696
+  - name: Get DAI Currency with 5 seconds timeout
+    steps:
+      - type: http
+        method: GET
+        url: https://api.rarible.org/v0.1/currencies/ETHEREUM:0x6b175474e89094c44da98b954eedeac495271d0f/rates/usd?at=2023-05-01T12:00:00Z
+        timeout: 5
+        assertions:
+          - result.statuscode ShouldEqual 200
+          - result.timeseconds ShouldBeLessThan 2
+          - result.bodyjson ShouldContainKey currencyId
+          - result.bodyjson ShouldContainKey rate
+          - result.bodyjson ShouldContainKey symbol
+          - result.bodyjson.symbol ShouldEqual dai
+          - result.bodyjson.rate ShouldEqual 0.9999927244454703

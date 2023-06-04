@@ -1,0 +1,36 @@
+name: Rarible API - Activity
+testcases:
+  - name: Get Activities by Users - Mints - ETHEREUM
+    steps:
+      - type: http
+        method: POST
+        url: https://api.rarible.org/v0.1/activities/byUsers
+        bodyfile: testdata/request-activity-vitalik.json.tmpl
+        headers:
+            Content-type: application/json
+        timeout: 5
+        assertions:
+          - result.statuscode ShouldEqual 200
+          - result.timeseconds ShouldBeLessThan 2
+          - result.bodyjson ShouldContainKey activities
+          - result.bodyjson.activities ShouldNotBeEmpty
+          - result.bodyjson.activities ShouldHaveLength 5
+          - result.bodyjson.activities.activities0 ShouldContainKey @type
+          - result.bodyjson.activities.activities0.@type ShouldEqual MINT
+          - result.bodyjson.activities.activities0 ShouldContainKey owner
+          - result.bodyjson.activities.activities0.owner ShouldEqual ETHEREUM:0xd8da6bf26964af9d7eed9e03e53415d37aa96045
+  - name: Get Activities by Users - Mints - NEAR
+    steps:
+      - type: http
+        method: POST
+        url: https://api.rarible.org/v0.1/activities/byUsers
+        bodyfile: testdata/request-activity-near.json.tmpl
+        headers:
+            Content-type: application/json
+        timeout: 5
+        assertions:
+          - result.statuscode ShouldEqual 400
+          - result.timeseconds ShouldBeLessThan 2
+          - result.bodyjson ShouldContainKey code
+          - result.bodyjson ShouldContainKey message
+          - result.bodyjson.code ShouldEqual "BAD_REQUEST"

@@ -1,0 +1,7 @@
+variables:
+  - foo=bar
+stop_on_failure: true
+format: xml
+output_dir: output
+lib_dir: lib
+verbosity: 3

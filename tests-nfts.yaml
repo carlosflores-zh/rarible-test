@@ -1,0 +1,14 @@
+name: Rarible API - NFTs
+testcases:
+  - name: Get Collections by ID - ETHEREUM
+    steps:
+      - type: http
+        method: GET
+        url: https://api.rarible.org/v0.1/collections/ETHEREUM:0xb66a603f4cfe17e3d27b87a8bfcad319856518b8
+        bodyfile: testdata/request-activity-vitalik.json.tmpl
+        headers:
+            Content-type: application/json
+        timeout: 5
+        assertions:
+          - result.statuscode ShouldEqual 200
+          - result.timeseconds ShouldBeLessThan 2
